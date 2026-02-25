@@ -45,37 +45,10 @@ if (buffer_timer <= 0)
 #endregion
 
 
-// Apply gravity if not grounded
-if (!on_ground)
-{
-    // Increase vertical speed with gravity
-    vspd += grav;
-}
-
-// Apply vertical movement
-y += vspd;
-
-#region Simple ground check
-if (y >= room_height)
-{
-    // Snap to ground
-    y = room_height;
-    
-    // Reset vertical speed
-    vspd = 0;
-    
-    // Set grounded
-    on_ground = true
-	
-	//
+/// Control, if I on ground, I can use attack fall all
+if on_ground{
 	can_attack_fall_all = true
 }
-else
-{
-    // Player is in air
-    on_ground = false
-}
-#endregion
 
 // Reduce combo timer
 if (combo_timer > 0)
@@ -141,17 +114,17 @@ else if state_current == states_player.punch
 		image_index = 0
 		
 		/// Activate hitbox
-		hitbox.active = true
+		hitbox_attack.active = true
     
-		hitbox.y1 = y - 30
-		hitbox.y2 = y - 25
+		hitbox_attack.y1 = y - 30
+		hitbox_attack.y2 = y - 25
 	}
 	
 	
 	if keyboard_check_pressed(vk_right) {image_xscale = global.rescale}
 	if keyboard_check_pressed(vk_left) {image_xscale = -global.rescale}
-	hitbox.x1 = x + (4 * sign(image_xscale)) - 1
-	hitbox.x2 = x + (19 * sign(image_xscale)) - 1
+	hitbox_attack.x1 = x + (4 * sign(image_xscale)) - 1
+	hitbox_attack.x2 = x + (19 * sign(image_xscale)) - 1
 	
 	/// When animation finishes
 	if (image_index >= image_number - 1){
@@ -182,7 +155,7 @@ else if state_current == states_player.punch
 		else
 		{
 			/// Stop attacking
-			hitbox.active = false;
+			hitbox_attack.active = false;
 			state_current = states_player.idle;
 		}
 	}
@@ -253,19 +226,19 @@ else if state_current == states_player.attack_crouch{
         
 		
 	    // Activate hitbox
-	    hitbox.active = true
+	    hitbox_attack.active = true
         
 	    // Define low hitbox
-	    hitbox.x1 = x + (5 * sign(image_xscale)) - 1
-	    hitbox.y1 = y - 18
-		hitbox.x2 = x + (20 * sign(image_xscale)) - 1
-		hitbox.y2 = y
+	    hitbox_attack.x1 = x + (5 * sign(image_xscale)) - 1
+	    hitbox_attack.y1 = y - 18
+		hitbox_attack.x2 = x + (20 * sign(image_xscale)) - 1
+		hitbox_attack.y2 = y
 	}
     
         
     // Stay crouched after attack
     if (image_index >= image_number - 1){
-        hitbox.active = false
+        hitbox_attack.active = false
 		
 		state_current = states_player.crouch
     }
@@ -296,11 +269,11 @@ else if state_current == states_player.jump{
 		
 		
 		/// Config hitbox
-		hitbox.active = true
+		hitbox_attack.active = true
     
-		hitbox.x1 = x + (4 * sign(image_xscale))
-		hitbox.x2 = x + (19 * sign(image_xscale))
-		hitbox.y2 = y + 45
+		hitbox_attack.x1 = x + (4 * sign(image_xscale))
+		hitbox_attack.x2 = x + (19 * sign(image_xscale))
+		hitbox_attack.y2 = y + 45
 		
 		modi_y2 = 45
 	}
@@ -310,12 +283,12 @@ else if state_current == states_player.jump{
 	//hitbox.y2 = clamp(hitbox.y2, -20, 45)
 	
 	/// Config hitbox
-	hitbox.y1 = y - 40
-	hitbox.y2 = y + modi_y2
+	hitbox_attack.y1 = y - 40
+	hitbox_attack.y2 = y + modi_y2
 	
     /// When going down switch to fall
     if vspd > 0{
-		hitbox.active = false
+		hitbox_attack.active = false
 		
 		state_current = states_player.fall
     }
@@ -382,26 +355,26 @@ else if state_current == states_player.attack_fall{
 		image_index = 0
 		
 		/// Activate hitbox
-		hitbox.active = true
-		hitbox.x1 = x + (4 * sign(image_xscale)) - 1
-		hitbox.x2 = x + (19 * sign(image_xscale)) - 1
+		hitbox_attack.active = true
+		hitbox_attack.x1 = x + (4 * sign(image_xscale)) - 1
+		hitbox_attack.x2 = x + (19 * sign(image_xscale)) - 1
 	}
 	
 	
 	/// Position hitbox
-	hitbox.y1 = y - 30
-	hitbox.y2 = y - 25
+	hitbox_attack.y1 = y - 30
+	hitbox_attack.y2 = y - 25
 	
 	/// When animation finishes
 	if (image_index >= image_number - 1){
 		/// Just falling
-		hitbox.active = false
+		hitbox_attack.active = false
 		state_current = states_player.fall
 	}
 	
 	if on_ground{
 		/// Stop attacking
-		hitbox.active = false;
+		hitbox_attack.active = false;
 		state_current = states_player.idle
 	}
 }
@@ -418,24 +391,24 @@ else if state_current == states_player.attack_fall_all{
         
 		
 	    // Activate hitbox
-	    hitbox.active = true
+	    hitbox_attack.active = true
         
 	    // Spin hitbox covers both sides
-	    hitbox.x1 = x - 20
-	    hitbox.x2 = x + 20
+	    hitbox_attack.x1 = x - 20
+	    hitbox_attack.x2 = x + 20
 	    
-		hitbox.x1 -= image_xscale < 0 ? 3 : 0;
-		hitbox.x2 += image_xscale > 0 ? 3 : 0;
+		hitbox_attack.x1 -= image_xscale < 0 ? 3 : 0;
+		hitbox_attack.x2 += image_xscale > 0 ? 3 : 0;
 	}
     
 	
 	/// Position hitbox
-	hitbox.y1 = y - 20
-	hitbox.y2 = y - 10
+	hitbox_attack.y1 = y - 20
+	hitbox_attack.y2 = y - 10
 	
     if (image_index >= image_number - 1)
     {
-        hitbox.active = false;
+        hitbox_attack.active = false;
 		
 		state_current = states_player.fall
     }

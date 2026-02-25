@@ -70,7 +70,7 @@ force_jump = -10
 can_attack_fall_all = true
 
 // Hitbox struct
-hitbox = {
+hitbox_attack = {
     active: false,
     x1: 0,
     y1: 0,
