@@ -9,3 +9,6 @@ global.debug = true
 
 // Wave actualy
 global.wave = 0
+
+//
+global.form = "human" // or ghost

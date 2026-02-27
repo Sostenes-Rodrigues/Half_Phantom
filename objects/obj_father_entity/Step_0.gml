@@ -9,10 +9,10 @@ if (!on_ground)
 y += vspd;
 
 #region Simple ground check
-if (y >= room_height)
+if (y >= room_height - 2)
 {
     // Snap to ground
-    y = room_height
+    y = room_height - 2
     
     // Reset vertical speed
     vspd = 0

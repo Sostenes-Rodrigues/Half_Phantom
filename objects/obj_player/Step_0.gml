@@ -45,6 +45,35 @@ if (buffer_timer <= 0)
 #endregion
 
 
+/// Switch world
+if keyboard_check_pressed(vk_space){
+	global.form = global.form == "human" ? "ghost" : "human"
+	
+	if global.form == "human"{
+		var _layer_id = layer_get_id("Backgrounds_1")
+		var _back_id = layer_background_get_id(_layer_id)
+		layer_background_change(_back_id, spr_back1)
+		_layer_id = layer_get_id("Backgrounds_2")
+		_back_id = layer_background_get_id(_layer_id)
+		layer_background_change(_back_id, spr_back2)
+		_layer_id = layer_get_id("Backgrounds_3")
+		_back_id = layer_background_get_id(_layer_id)
+		layer_background_change(_back_id, spr_back3)
+	}
+	else{
+		var _layer_id = layer_get_id("Backgrounds_1")
+		var _back_id = layer_background_get_id(_layer_id)
+		layer_background_change(_back_id, spr_back_phantom1)
+		_layer_id = layer_get_id("Backgrounds_2")
+		_back_id = layer_background_get_id(_layer_id)
+		layer_background_change(_back_id, spr_back_phantom2)
+		_layer_id = layer_get_id("Backgrounds_3")
+		_back_id = layer_background_get_id(_layer_id)
+		layer_background_change(_back_id, spr_back_phantom3)
+	}
+}
+
+
 /// Control, if I on ground, I can use attack fall all
 if on_ground{
 	can_attack_fall_all = true
@@ -118,6 +147,11 @@ else if state_current == states_player.punch
     
 		hitbox_attack.y1 = y - 30
 		hitbox_attack.y2 = y - 25
+		
+		if instance_exists(obj_father_enemy){
+			obj_father_enemy.can_hi1 = true
+			obj_father_enemy.can_hi2 = false
+		}
 	}
 	
 	
@@ -125,6 +159,15 @@ else if state_current == states_player.punch
 	if keyboard_check_pressed(vk_left) {image_xscale = -global.rescale}
 	hitbox_attack.x1 = x + (4 * sign(image_xscale)) - 1
 	hitbox_attack.x2 = x + (19 * sign(image_xscale)) - 1
+	
+	
+	/// Hits
+	if image_index == 1{
+		set_damage()
+	}
+	if image_index == 4{
+		set_damage(2)
+	}
 	
 	/// When animation finishes
 	if (image_index >= image_number - 1){
@@ -136,8 +179,7 @@ else if state_current == states_player.punch
 			keyboard_check_pressed(vk_right);
 		
 		/// If player still wants to punch
-		if (want_punch)
-		{
+		if (want_punch){
 			/// Change direction if needed
 			if (keyboard_check(vk_right) or buffer_input == vk_right)
 				image_xscale = global.rescale;
@@ -152,8 +194,7 @@ else if state_current == states_player.punch
 			buffer_input = -1;
 			buffer_timer = 0;
 		}
-		else
-		{
+		else{
 			/// Stop attacking
 			hitbox_attack.active = false;
 			state_current = states_player.idle;
@@ -233,8 +274,15 @@ else if state_current == states_player.attack_crouch{
 	    hitbox_attack.y1 = y - 18
 		hitbox_attack.x2 = x + (20 * sign(image_xscale)) - 1
 		hitbox_attack.y2 = y
+		
+		if instance_exists(obj_father_enemy){
+			obj_father_enemy.can_hi1 = true
+			obj_father_enemy.can_hi2 = false
+		}
 	}
     
+	// Hit
+	set_damage(1, .5, true, random_range(7, 8), sign(image_xscale) ? 0 : 180)
         
     // Stay crouched after attack
     if (image_index >= image_number - 1){
@@ -276,6 +324,11 @@ else if state_current == states_player.jump{
 		hitbox_attack.y2 = y + 45
 		
 		modi_y2 = 45
+		
+		if instance_exists(obj_father_enemy){
+			obj_father_enemy.can_hi1 = true
+			obj_father_enemy.can_hi2 = false
+		}
 	}
     
 	
@@ -285,6 +338,11 @@ else if state_current == states_player.jump{
 	/// Config hitbox
 	hitbox_attack.y1 = y - 40
 	hitbox_attack.y2 = y + modi_y2
+	
+	
+	// Hit
+	set_damage(3, 1.5, true, random_range(7, 8), irandom_range(45, 65) * sign(image_xscale))
+	
 	
     /// When going down switch to fall
     if vspd > 0{
@@ -358,12 +416,25 @@ else if state_current == states_player.attack_fall{
 		hitbox_attack.active = true
 		hitbox_attack.x1 = x + (4 * sign(image_xscale)) - 1
 		hitbox_attack.x2 = x + (19 * sign(image_xscale)) - 1
+		
+		if instance_exists(obj_father_enemy){
+			obj_father_enemy.can_hi1 = true
+			obj_father_enemy.can_hi2 = false
+		}
 	}
 	
 	
 	/// Position hitbox
 	hitbox_attack.y1 = y - 30
 	hitbox_attack.y2 = y - 25
+	
+	/// Hits
+	if image_index == 1{
+		set_damage()
+	}
+	if image_index == 4{
+		set_damage(2)
+	}
 	
 	/// When animation finishes
 	if (image_index >= image_number - 1){
@@ -399,8 +470,16 @@ else if state_current == states_player.attack_fall_all{
 	    
 		hitbox_attack.x1 -= image_xscale < 0 ? 3 : 0;
 		hitbox_attack.x2 += image_xscale > 0 ? 3 : 0;
+		
+		if instance_exists(obj_father_enemy){
+			obj_father_enemy.can_hi1 = true
+			obj_father_enemy.can_hi2 = false
+		}
 	}
     
+	
+	// Hit
+	set_damage(1, 1.5, true, random_range(7, 8), irandom_range(25, 35))
 	
 	/// Position hitbox
 	hitbox_attack.y1 = y - 20

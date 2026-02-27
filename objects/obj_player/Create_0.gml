@@ -1,8 +1,41 @@
 event_inherited()
 
 
-// Create a struct containing all player sprites
+/// Create a struct containing all player sprites
 sprites = {
+    
+    // Idle sprite
+    idle: spr_player_idle,
+    
+    // Punch sprites
+    punch: spr_player_attack,
+	
+	// Gun Fire sprites
+	fire: spr_player_fire,
+    
+    // Crouch sprite
+    crouch: spr_player_down,
+    
+    // Low attack variations
+    attack_crouch: spr_player_attack_down,
+	
+    // Low gun fire variations
+    fire_crouch: spr_player_fire_down,
+    
+    // Jump sprite
+    jump: spr_player_shoryuken,
+    
+    // Falling sprite
+    fall: spr_player_falling,
+    
+    // Air attacks
+    attack_fall: spr_player_attack_falling,
+    attack_fall_all: spr_player_attack_falling_all,
+	
+	// Air gun fire sprites
+	fire_fall: spr_player_fire_falling
+};
+sprites_ghost = {
     
     // Idle sprite
     idle: spr_player_idle,
@@ -78,6 +111,8 @@ hitbox_attack = {
     y2: 0
 };
 
+///
+
 //
 modi_y2 = 0
 
@@ -118,6 +153,58 @@ trigger_attack_fall_all = function(){
 		
 		state_current = states_player.attack_fall_all
 	}
+}
+
+/// Set damage
+set_damage = function(_type=1, _damage=1, _knockback=false, _force=0, _dir=0){
+	var _array_inst = ds_list_create()
+	var _array_inst_cont = collision_rectangle_list(hitbox_attack.x1, hitbox_attack.y1, hitbox_attack.x2, hitbox_attack.y2, obj_father_enemy, false, true, _array_inst, true)
+	
+	var _inst = noone
+	if _array_inst_cont > 0{
+		///
+		if _type == 3{
+			for (var i = 0; i < ds_list_size(_array_inst); ++i){
+			    //
+				_inst = _array_inst[| i]
+				
+				if _inst.state_current_txt != "knockback"{
+					_inst.life -= _damage
+				}
+			}
+		}
+		else{
+			/// Get nearest instance
+			_inst = _array_inst[| 0]
+		
+			if _inst.state_current_txt != "knockback"{
+				if _type == 1 and _inst.can_hi1{
+					_inst.life -= _damage
+					_inst.can_hi1 = false
+					_inst.can_hi2 = true
+				}
+				if _type == 2 and _inst.can_hi2{
+					_inst.life -= _damage
+					_inst.can_hi1 = true
+					_inst.can_hi2 = false
+				}			
+			}
+		}
+		
+		///
+		if _knockback{
+			_inst.received_knockback(_force, _dir)
+		}
+			
+		if _inst.life <= 0{
+			_inst.state_current = _inst.states_enemy.dead
+		}
+	}
+	
+	ds_list_clear(_array_inst)
+	ds_list_destroy(_array_inst)
+	
+	return _inst
 }
 
 /// Create Bullet

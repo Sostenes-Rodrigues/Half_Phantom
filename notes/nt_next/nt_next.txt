@@ -2,8 +2,14 @@ Make enemies go towards the middle of the room CHECK
 
 Enemies stop in front of the player CHECK
 
-Do the damage and knockback systems RUNNIG
+Do the damage and knockback systems CHECK
+
+Background
+
+Switch of type enemy
 
 Life and spectral energy
+
+Enemy attack
 
 Create a spawner

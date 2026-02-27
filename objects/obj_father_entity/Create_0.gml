@@ -1,5 +1,6 @@
 // Store current direction (global.rescale = right, -global.rescale = left)
 image_xscale = global.rescale
+image_yscale = image_xscale
 
 /// Life
 life_max = 3
