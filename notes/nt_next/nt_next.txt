@@ -4,11 +4,11 @@ Enemies stop in front of the player CHECK
 
 Do the damage and knockback systems CHECK
 
-Background
+Background CHECK
 
-Switch of type enemy
+Switch of type enemy CHECK
 
-Life and spectral energy
+Life and spectral energy CHECK
 
 Enemy attack
 

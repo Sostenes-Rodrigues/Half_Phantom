@@ -47,6 +47,13 @@ if (buffer_timer <= 0)
 
 /// Switch world
 if keyboard_check_pressed(vk_space){
+	//
+	global.effect_screen = 1
+	ef_col1 = choose(c_white, c_green, c_lime)
+	ef_col2 = choose(c_white, c_green, c_lime)
+	ef_col3 = choose(c_white, c_green, c_lime)
+	ef_col4 = choose(c_white, c_green, c_lime)
+	
 	global.form = global.form == "human" ? "ghost" : "human"
 	
 	if global.form == "human"{
@@ -120,7 +127,7 @@ if state_current == states_player.idle{
 	    // If down input buffered
 	    if (buffer_input == vk_down)
 	    {
-			state_current = states_player.crouch
+			state_current = states_player.attack_crouch
 	    }
         
 	    // If up input buffered
@@ -163,10 +170,10 @@ else if state_current == states_player.punch
 	
 	/// Hits
 	if image_index == 1{
-		set_damage()
+		set_damage(1, 1, false, 0, 0, global.form)
 	}
 	if image_index == 4{
-		set_damage(2)
+		set_damage(2, 1, false, 0, 0, global.form)
 	}
 	
 	/// When animation finishes
@@ -282,7 +289,7 @@ else if state_current == states_player.attack_crouch{
 	}
     
 	// Hit
-	set_damage(1, .5, true, random_range(7, 8), sign(image_xscale) ? 0 : 180)
+	set_damage(1, .5, true, random_range(7, 8), sign(image_xscale) ? 0 : 180, global.form)
         
     // Stay crouched after attack
     if (image_index >= image_number - 1){
@@ -341,7 +348,7 @@ else if state_current == states_player.jump{
 	
 	
 	// Hit
-	set_damage(3, 1.5, true, random_range(7, 8), irandom_range(45, 65) * sign(image_xscale))
+	set_damage(3, 1.5, true, random_range(7, 8), irandom_range(45, 65) * sign(image_xscale), global.form)
 	
 	
     /// When going down switch to fall
@@ -430,10 +437,10 @@ else if state_current == states_player.attack_fall{
 	
 	/// Hits
 	if image_index == 1{
-		set_damage()
+		set_damage(1, 1, false, 0, 0, global.form)
 	}
 	if image_index == 4{
-		set_damage(2)
+		set_damage(2, 1, false, 0, 0, global.form)
 	}
 	
 	/// When animation finishes
@@ -479,7 +486,7 @@ else if state_current == states_player.attack_fall_all{
     
 	
 	// Hit
-	set_damage(1, 1.5, true, random_range(7, 8), irandom_range(25, 35))
+	set_damage(1, 1.5, true, random_range(7, 8), irandom_range(25, 35), global.form)
 	
 	/// Position hitbox
 	hitbox_attack.y1 = y - 20
@@ -502,5 +509,19 @@ else if state_current == states_player.fire_fall{
 		sprite_index = sprites.fire_fall
 		image_index = 0
 	}
+}
+
+
+else if state_current == states_player.dead{
+	/// Fist frame
+	if state_current_txt != "dead"{
+		state_current_txt = "dead"
+		
+		sprite_index = sprites.idle
+		image_index = 2
+		image_speed = 0
+	}
+	
+	
 }
 #endregion

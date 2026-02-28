@@ -1,6 +1,12 @@
 event_inherited()
 
 
+//
+form = "human"
+
+//
+sprites = noone
+
 // Store for all enemy states
 states_enemy = {
 	idle: 0,
@@ -19,6 +25,9 @@ state_current_txt = ""
 ///
 can_hi1 = true
 can_hi2 = false
+
+//
+attack = true
 
 /// Methods
 received_knockback = function(_force=1, _dir=0){

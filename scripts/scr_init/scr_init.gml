@@ -12,3 +12,6 @@ global.wave = 0
 
 //
 global.form = "human" // or ghost
+
+//
+global.effect_screen = 0

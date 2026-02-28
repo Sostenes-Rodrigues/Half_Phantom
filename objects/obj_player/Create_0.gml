@@ -1,6 +1,12 @@
 event_inherited()
 
 
+///
+life_max = 10
+life = life_max
+life_phantom_max = life_max
+life_phantom = life_max
+
 /// Create a struct containing all player sprites
 sprites = {
     
@@ -38,35 +44,35 @@ sprites = {
 sprites_ghost = {
     
     // Idle sprite
-    idle: spr_player_idle,
+    idle: spr_player_G_idle,
     
     // Punch sprites
-    punch: spr_player_attack,
+    punch: spr_player_G_attack,
 	
 	// Gun Fire sprites
-	fire: spr_player_fire,
+	//fire: spr_player_fire,
     
     // Crouch sprite
-    crouch: spr_player_down,
+    crouch: spr_player_G_down,
     
     // Low attack variations
-    attack_crouch: spr_player_attack_down,
+    attack_crouch: spr_player_G_attack_down,
 	
     // Low gun fire variations
-    fire_crouch: spr_player_fire_down,
+    //fire_crouch: spr_player_fire_down,
     
     // Jump sprite
-    jump: spr_player_shoryuken,
+    jump: spr_player_G_shoryuken,
     
     // Falling sprite
-    fall: spr_player_falling,
+    fall: spr_player_G_falling,
     
     // Air attacks
-    attack_fall: spr_player_attack_falling,
-    attack_fall_all: spr_player_attack_falling_all,
+    attack_fall: spr_player_G_attack_falling,
+    attack_fall_all: spr_player_G_attack_falling_all,
 	
 	// Air gun fire sprites
-	fire_fall: spr_player_fire_falling
+	//fire_fall: spr_player_fire_falling
 };
 
 
@@ -82,7 +88,8 @@ states_player = {
 	fall: 7,
 	attack_fall:8,
 	attack_fall_all: 9,
-	fire_fall: 10
+	fire_fall: 10,
+	dead: 11
 }
 
 // Set initial state
@@ -112,6 +119,10 @@ hitbox_attack = {
 };
 
 ///
+ef_col1 = c_white
+ef_col2 = c_white
+ef_col3 = c_white
+ef_col4 = c_white
 
 //
 modi_y2 = 0
@@ -156,7 +167,7 @@ trigger_attack_fall_all = function(){
 }
 
 /// Set damage
-set_damage = function(_type=1, _damage=1, _knockback=false, _force=0, _dir=0){
+set_damage = function(_type=1, _damage=1, _knockback=false, _force=0, _dir=0, _form="human"){
 	var _array_inst = ds_list_create()
 	var _array_inst_cont = collision_rectangle_list(hitbox_attack.x1, hitbox_attack.y1, hitbox_attack.x2, hitbox_attack.y2, obj_father_enemy, false, true, _array_inst, true)
 	
@@ -168,36 +179,42 @@ set_damage = function(_type=1, _damage=1, _knockback=false, _force=0, _dir=0){
 			    //
 				_inst = _array_inst[| i]
 				
-				if _inst.state_current_txt != "knockback"{
-					_inst.life -= _damage
+				if _form == _inst.form{
+					if _inst.state_current_txt != "knockback"{
+						_inst.life -= _damage
+					}
 				}
 			}
 		}
 		else{
 			/// Get nearest instance
 			_inst = _array_inst[| 0]
-		
-			if _inst.state_current_txt != "knockback"{
-				if _type == 1 and _inst.can_hi1{
-					_inst.life -= _damage
-					_inst.can_hi1 = false
-					_inst.can_hi2 = true
+			
+			if _form == _inst.form{
+				if _inst.state_current_txt != "knockback"{
+					if _type == 1 and _inst.can_hi1{
+						_inst.life -= _damage
+						_inst.can_hi1 = false
+						_inst.can_hi2 = true
+					}
+					if _type == 2 and _inst.can_hi2{
+						_inst.life -= _damage
+						_inst.can_hi1 = true
+						_inst.can_hi2 = false
+					}			
 				}
-				if _type == 2 and _inst.can_hi2{
-					_inst.life -= _damage
-					_inst.can_hi1 = true
-					_inst.can_hi2 = false
-				}			
 			}
 		}
 		
 		///
-		if _knockback{
-			_inst.received_knockback(_force, _dir)
-		}
+		if _form == _inst.form{
+			if _knockback{
+				_inst.received_knockback(_force, _dir)
+			}
 			
-		if _inst.life <= 0{
-			_inst.state_current = _inst.states_enemy.dead
+			if _inst.life <= 0{
+				_inst.state_current = _inst.states_enemy.dead
+			}
 		}
 	}
 	
