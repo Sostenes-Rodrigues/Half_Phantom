@@ -11,6 +11,9 @@ draw_healthbar(15, 10, 80, 16, pc, c_red, c_red, c_red, 0, false, true)
 pc = (life_phantom / life_phantom_max) * 100;
 draw_healthbar(15, 20, 80, 26, pc, c_lime, c_lime, c_lime, 0, false, true)
 
+pc = (life_gem / life_gem_max) * 100;
+draw_healthbar(15, 30, 80, 36, pc, c_blue, c_blue, c_blue, 0, false, true)
+
 
 ///
 draw_set_alpha(global.effect_screen)

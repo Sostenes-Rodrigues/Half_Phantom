@@ -1,14 +1,21 @@
 //
-window_set_size(1024, 576)
+//window_set_size(1024, 576)
+window_set_fullscreen(true)
+
+//
+randomise()
 
 // Rescale for all sprites
 global.rescale = 2
 
-// Control view debug
-global.debug = true
+//
+global.defeat = false
 
-// Wave actualy
-global.wave = 0
+// Control view debug
+global.debug = -1
+
+// Timer actualy
+global.timer = 180
 
 //
 global.form = "human" // or ghost

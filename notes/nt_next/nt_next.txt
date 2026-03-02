@@ -10,6 +10,26 @@ Switch of type enemy CHECK
 
 Life and spectral energy CHECK
 
-Enemy attack
+Enemy attack CHECK
 
-Create a spawner
+Ball enemy CHECK
+
+Ghost in top Skip
+
+Create a spawner wich waves (or timer to save de gem) CHECK
+
+Criar os cartões: historia, controles ("E" to exit game)
+
+Restart CHECK
+
+Capa no gimp CHECK
+
+Tirar os debug ("D") CHECK
+
+Começar tela cheia com base no monitor CHECK
+
+Exportar para Win e Linux
+
+Criar a página no Itch
+
+Verificar tudo a ser enviado (jogo, GDD e ect)

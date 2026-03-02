@@ -46,7 +46,7 @@ if (buffer_timer <= 0)
 
 
 /// Switch world
-if keyboard_check_pressed(vk_space){
+if keyboard_check_pressed(vk_space) and !global.defeat{
 	//
 	global.effect_screen = 1
 	ef_col1 = choose(c_white, c_green, c_lime)
@@ -57,6 +57,15 @@ if keyboard_check_pressed(vk_space){
 	global.form = global.form == "human" ? "ghost" : "human"
 	
 	if global.form == "human"{
+		if sprites_ghost.attack_crouch == sprite_index{sprite_index = sprites.crouch}
+		else if sprites_ghost.attack_fall == sprite_index{sprite_index = sprites.attack_fall}
+		else if sprites_ghost.attack_fall_all == sprite_index{sprite_index = sprites.attack_fall_all}
+		else if sprites_ghost.crouch == sprite_index{sprite_index = sprites.crouch}
+		else if sprites_ghost.fall == sprite_index{sprite_index = sprites.fall}
+		else if sprites_ghost.idle == sprite_index{sprite_index = sprites.idle}
+		else if sprites_ghost.jump == sprite_index{sprite_index = sprites.jump}
+		else if sprites_ghost.punch == sprite_index{sprite_index = sprites.punch}
+		
 		var _layer_id = layer_get_id("Backgrounds_1")
 		var _back_id = layer_background_get_id(_layer_id)
 		layer_background_change(_back_id, spr_back1)
@@ -68,6 +77,15 @@ if keyboard_check_pressed(vk_space){
 		layer_background_change(_back_id, spr_back3)
 	}
 	else{
+		if sprites.attack_crouch == sprite_index{sprite_index = sprites_ghost.crouch}
+		else if sprites.attack_fall == sprite_index{sprite_index = sprites_ghost.attack_fall}
+		else if sprites.attack_fall_all == sprite_index{sprite_index = sprites_ghost.attack_fall_all}
+		else if sprites.crouch == sprite_index{sprite_index = sprites_ghost.crouch}
+		else if sprites.fall == sprite_index{sprite_index = sprites_ghost.fall}
+		else if sprites.idle == sprite_index{sprite_index = sprites_ghost.idle}
+		else if sprites.jump == sprite_index{sprite_index = sprites_ghost.jump}
+		else if sprites.punch == sprite_index{sprite_index = sprites_ghost.punch}
+		
 		var _layer_id = layer_get_id("Backgrounds_1")
 		var _back_id = layer_background_get_id(_layer_id)
 		layer_background_change(_back_id, spr_back_phantom1)
@@ -100,6 +118,7 @@ if state_current == states_player.idle{
 		
 		// Set idle sprite
 		sprite_index = sprites.idle
+		if global.form == "ghost"{sprite_index = sprites_ghost.idle}
 		image_index = 0
 	}
 	
@@ -147,6 +166,7 @@ else if state_current == states_player.punch
 		state_current_txt = "punch"
 		
 		sprite_index = sprites.punch
+		if global.form == "ghost"{sprite_index = sprites_ghost.punch}
 		image_index = 0
 		
 		/// Activate hitbox
@@ -210,6 +230,11 @@ else if state_current == states_player.punch
 	
 	// If up input buffered
 	trigger_jump()
+	
+	//
+	if keyboard_check_pressed(vk_down){
+		state_current = states_player.attack_crouch
+	}
 }
 
 
@@ -230,6 +255,7 @@ else if state_current == states_player.crouch{
 		state_current_txt = "crouch"
 		
 		sprite_index = sprites.crouch
+		if global.form == "ghost"{sprite_index = sprites_ghost.crouch}
 		image_index = 0
 	}
     
@@ -270,6 +296,7 @@ else if state_current == states_player.attack_crouch{
 		
 		// Alternate low attack sprite
 	    sprite_index = sprites.attack_crouch
+		if global.form == "ghost"{sprite_index = sprites_ghost.attack_crouch}
 		image_index = 0
         
 		
@@ -318,6 +345,7 @@ else if state_current == states_player.jump{
 		
 		// Set jump sprite
 		sprite_index = sprites.jump
+		if global.form == "ghost"{sprite_index = sprites_ghost.jump}
 		image_index = 0
 		
 		on_ground = false
@@ -370,6 +398,7 @@ else if state_current == states_player.fall{
 		
 		// Set fall sprite
 		sprite_index = sprites.fall
+		if global.form == "ghost"{sprite_index = sprites_ghost.fall}
 		image_index = 0
 	}
 	
@@ -417,6 +446,7 @@ else if state_current == states_player.attack_fall{
 		state_current_txt = "attack_fall"
 		
 		sprite_index = sprites.attack_fall
+		if global.form == "ghost"{sprite_index = sprites_ghost.attack_fall}
 		image_index = 0
 		
 		/// Activate hitbox
@@ -465,6 +495,7 @@ else if state_current == states_player.attack_fall_all{
 		
 		// Set spin sprite
 	    sprite_index = sprites.attack_fall_all
+		if global.form == "ghost"{sprite_index = sprites_ghost.attack_fall_all}
 		image_index = 0
         
 		
@@ -517,11 +548,20 @@ else if state_current == states_player.dead{
 	if state_current_txt != "dead"{
 		state_current_txt = "dead"
 		
+		audio_play_sound(snd_sfx_dead, 5, false)
+		
 		sprite_index = sprites.idle
+		if global.form == "ghost"{sprite_index = sprites_ghost.idle}
 		image_index = 2
 		image_speed = 0
+		
+		if instance_exists(obj_control){
+			global.defeat = true
+		}
+		
+		instance_destroy(obj_father_enemy)
 	}
 	
-	
+	///
 }
 #endregion

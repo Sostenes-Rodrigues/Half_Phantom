@@ -6,6 +6,8 @@ life_max = 10
 life = life_max
 life_phantom_max = life_max
 life_phantom = life_max
+life_gem_max = life_max
+life_gem = life_max
 
 /// Create a struct containing all player sprites
 sprites = {
@@ -44,32 +46,32 @@ sprites = {
 sprites_ghost = {
     
     // Idle sprite
-    idle: spr_player_G_idle,
+    idle: spr_player_idle_G,
     
     // Punch sprites
-    punch: spr_player_G_attack,
+    punch: spr_player_attack_G,
 	
 	// Gun Fire sprites
 	//fire: spr_player_fire,
     
     // Crouch sprite
-    crouch: spr_player_G_down,
+    crouch: spr_player_down_G,
     
     // Low attack variations
-    attack_crouch: spr_player_G_attack_down,
+    attack_crouch: spr_player_attack_down_G,
 	
     // Low gun fire variations
     //fire_crouch: spr_player_fire_down,
     
     // Jump sprite
-    jump: spr_player_G_shoryuken,
+    jump: spr_player_shoryuken_G,
     
     // Falling sprite
-    fall: spr_player_G_falling,
+    fall: spr_player_falling_G,
     
     // Air attacks
-    attack_fall: spr_player_G_attack_falling,
-    attack_fall_all: spr_player_G_attack_falling_all,
+    attack_fall: spr_player_attack_falling_G,
+    attack_fall_all: spr_player_attack_falling_all_G,
 	
 	// Air gun fire sprites
 	//fire_fall: spr_player_fire_falling
@@ -224,8 +226,4 @@ set_damage = function(_type=1, _damage=1, _knockback=false, _force=0, _dir=0, _f
 	return _inst
 }
 
-/// Create Bullet
-create_bullet = function(){
-	
-}
 #endregion

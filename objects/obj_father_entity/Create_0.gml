@@ -3,7 +3,7 @@ image_xscale = global.rescale
 image_yscale = image_xscale
 
 /// Life
-life_max = 3
+life_max = 2
 life = life_max
 
 // Vertical speed
